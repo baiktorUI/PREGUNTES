@@ -25,7 +25,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
   // Navegación con teclado
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showResult) return; // Si ya se mostró el resultado, no hacer nada
+      if (showResult) return;
 
       // Teclas numéricas 1-5 para seleccionar
       if (e.key >= '1' && e.key <= '5') {
@@ -75,8 +75,18 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     }
   };
 
+  const handleNext = () => {
+    // Reset para próxima pregunta
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setIsCorrect(false);
+  };
+
   return (
     <div className="app-container flex items-center justify-center">
+      {/* Logo */}
+      <img src="/logo-mullada.png" alt="Logo" className="app-logo" />
+
       {/* Efectos visuales de error */}
       {showWrongEffect && (
         <>
@@ -100,8 +110,9 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
         <div className="answers-container">
           {ANSWERS.map((answer, index) => {
             const isSelected = selectedAnswer === index;
-            const showCorrect = showResult && answer.correct;
-            const showIncorrect = showResult && isSelected && !answer.correct;
+            // SOLO mostrar correcta si acertaste
+            const showCorrect = showResult && isCorrect && answer.correct;
+            const showIncorrect = showResult && isSelected && !isCorrect;
 
             return (
               <button
@@ -124,17 +135,22 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
         {/* Instrucciones */}
         {!showResult && (
           <div className="instructions">
-            Usa las <kbd>↑</kbd> <kbd>↓</kbd> teclas o haz clic para seleccionar
+            Usa les <kbd>↑</kbd> <kbd>↓</kbd> tecles o fes clic per seleccionar
             <br />
-            Presiona <kbd>Enter</kbd> para confirmar
+            Prem <kbd>Enter</kbd> per confirmar
           </div>
         )}
 
-        {/* Botón de reinicio */}
+        {/* Botones de navegación */}
         {showResult && (
-          <button onClick={onReset} className="reset-button">
-            ← Tornar a l'inici
-          </button>
+          <div className="navigation-buttons">
+            <button onClick={onReset} className="nav-button">
+              ← Enrere
+            </button>
+            <button onClick={handleNext} className="nav-button">
+              Següent →
+            </button>
+          </div>
         )}
       </div>
     </div>
