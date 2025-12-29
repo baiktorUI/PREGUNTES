@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createWaterEffect } from '../utils/waterEffect';
+import { createWaterEffect } from '../utils/waterEffect.ts';
 
 interface QuestionScreenProps {
   numPlayers: number;
