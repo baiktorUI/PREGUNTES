@@ -1,41 +1,52 @@
+/* Logo */
+.app-logo {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
 /* Estilos para PlayerSetup */
 .setup-container {
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 24px;
-  padding: 60px;
+  border-radius: 20px;
+  padding: 40px;
   width: 90%;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 .setup-title {
-  font-size: 42px;
+  font-size: 32px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #FFD700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .setup-subtitle {
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .player-buttons {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .player-button {
-  padding: 30px 40px;
-  font-size: 28px;
+  padding: 20px 30px;
+  font-size: 22px;
   font-weight: bold;
   background: rgba(255, 255, 255, 0.9);
   border: none;
-  border-radius: 16px;
+  border-radius: 12px;
   color: #1a1a2e;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -43,7 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .player-button:hover {
@@ -53,24 +64,24 @@
 }
 
 .player-icon {
-  font-size: 36px;
+  font-size: 28px;
 }
 
 /* Estilos para QuestionScreen */
 .question-container {
   width: 90%;
-  max-width: 900px;
+  max-width: 750px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
 .player-indicator {
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 12px 30px;
+  border-radius: 16px;
+  padding: 8px 20px;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #ffffff;
   text-transform: uppercase;
@@ -79,39 +90,39 @@
 
 .question-box {
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 24px;
-  padding: 40px;
+  border-radius: 20px;
+  padding: 25px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .question-text {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
   color: #1a1a2e;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.3;
 }
 
 .answers-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .answer-button {
-  padding: 24px 32px;
-  font-size: 22px;
+  padding: 16px 24px;
+  font-size: 18px;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.9);
-  border: 4px solid transparent;
-  border-radius: 16px;
+  border: 3px solid transparent;
+  border-radius: 12px;
   color: #1a1a2e;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   text-align: left;
 }
 
@@ -144,12 +155,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   background: linear-gradient(135deg, #e03c0a, #0e487e);
   color: white;
-  border-radius: 12px;
-  font-size: 24px;
+  border-radius: 10px;
+  font-size: 20px;
   font-weight: bold;
   flex-shrink: 0;
 }
@@ -171,13 +182,13 @@
 }
 
 .reset-button {
-  margin-top: 20px;
-  padding: 16px 40px;
-  font-size: 18px;
+  margin-top: 15px;
+  padding: 12px 30px;
+  font-size: 16px;
   font-weight: bold;
   background: linear-gradient(135deg, #E94E18, #c73d14);
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -188,6 +199,41 @@
 .reset-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(233, 78, 24, 0.6);
+}
+
+/* Botones de navegación */
+.navigation-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.nav-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 1);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Efectos visuales */
@@ -208,7 +254,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 300px;
+  font-size: 250px;
   color: #ff0000;
   font-weight: bold;
   z-index: 9999;
@@ -226,27 +272,95 @@
   pointer-events: none;
   z-index: 9999;
   overflow: hidden;
+  background: linear-gradient(180deg, 
+    rgba(100, 200, 255, 0) 0%, 
+    rgba(100, 200, 255, 0.1) 20%,
+    rgba(100, 200, 255, 0.3) 50%,
+    rgba(100, 200, 255, 0.5) 100%
+  );
+  animation: waterFlow 2s ease-out forwards;
 }
 
 .water-drop {
   position: absolute;
-  background: radial-gradient(circle, rgba(100, 200, 255, 0.6) 0%, rgba(100, 200, 255, 0.3) 50%, transparent 100%);
+  background: radial-gradient(circle, rgba(150, 220, 255, 0.8) 0%, rgba(100, 200, 255, 0.5) 40%, transparent 80%);
   border-radius: 50%;
-  animation: dropFall 1.5s ease-out forwards;
+  animation: dropFall 2s ease-out forwards;
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.6);
+}
+
+.water-ripple {
+  position: absolute;
+  border: 3px solid rgba(100, 200, 255, 0.6);
+  border-radius: 50%;
+  animation: rippleExpand 1.5s ease-out forwards;
+}
+
+.water-splash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, 
+    rgba(100, 200, 255, 0.4) 0%,
+    rgba(100, 200, 255, 0.2) 30%,
+    transparent 60%
+  );
+  animation: splashEffect 1.5s ease-out forwards;
+}
+
+@keyframes waterFlow {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
 }
 
 @keyframes dropFall {
   0% {
-    transform: translateY(-100px) scale(0);
+    transform: translateY(-100px) scale(0.5);
     opacity: 1;
   }
   50% {
-    transform: translateY(0) scale(1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
-    transform: translateY(100vh) scale(0.5);
+    transform: translateY(120vh) scale(1.5);
     opacity: 0;
+  }
+}
+
+@keyframes rippleExpand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+@keyframes splashEffect {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
   }
 }
 
@@ -276,18 +390,19 @@
 /* Instrucciones */
 .instructions {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px;
   color: rgba(255, 255, 255, 0.7);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .instructions kbd {
   background: rgba(255, 255, 255, 0.2);
-  padding: 4px 12px;
-  border-radius: 6px;
+  padding: 3px 10px;
+  border-radius: 5px;
   font-family: monospace;
   font-weight: bold;
   color: #FFD700;
-  margin: 0 4px;
+  margin: 0 3px;
+  font-size: 13px;
 }
