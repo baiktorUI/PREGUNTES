@@ -4,6 +4,9 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
