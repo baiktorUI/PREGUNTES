@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { PlayerSetup } from './components/PlayerSetup';
-import { QuestionScreen } from './components/QuestionScreen';
-import type { GameState } from './types/trivia';
+import { PlayerSetup } from './components/PlayerSetup.tsx';
+import { QuestionScreen } from './components/QuestionScreen.tsx';
+import type { GameState } from './types/trivia.ts';
 import './index.css';
 import './TriviaApp.css';
 
