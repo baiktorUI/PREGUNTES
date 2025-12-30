@@ -1,34 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { createWaterEffect } from '../utils/waterEffect';
+import { QUESTIONS } from '../utils/questions';
 
 interface QuestionScreenProps {
   numPlayers: number;
   onReset: () => void;
 }
 
-const QUESTION = 'AMB QUINS COLORS JUGA EL PRIMER EQUIP DEL CLUB DE FUTBOL SANT FELIU DE GUÍXOLS?';
-
-const ANSWERS = [
-  { id: 0, text: 'Taronja i blanc', correct: false },
-  { id: 1, text: 'Blau i Blanc', correct: false },
-  { id: 2, text: 'Vermell i Blanc', correct: false },
-  { id: 3, text: 'Blau i Vermell', correct: true },
-  { id: 4, text: 'Groc i Negre', correct: false },
-];
-
 export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onReset }) => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showWrongEffect, setShowWrongEffect] = useState(false);
+
+  const currentQuestion = QUESTIONS[currentQuestionIndex];
+  const isLastQuestion = currentQuestionIndex === QUESTIONS.length - 1;
 
   // Navegación con teclado
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (showResult) return;
 
-      // Teclas numéricas 1-5 para seleccionar
-      if (e.key >= '1' && e.key <= '5') {
+      const numAnswers = currentQuestion.answers.length;
+
+      // Teclas numéricas para seleccionar
+      if (e.key >= '1' && e.key <= String(numAnswers)) {
         const index = parseInt(e.key) - 1;
         setSelectedAnswer(index);
       }
@@ -37,7 +34,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
       if (e.key === 'ArrowUp' && selectedAnswer !== null && selectedAnswer > 0) {
         setSelectedAnswer(selectedAnswer - 1);
       }
-      if (e.key === 'ArrowDown' && selectedAnswer !== null && selectedAnswer < ANSWERS.length - 1) {
+      if (e.key === 'ArrowDown' && selectedAnswer !== null && selectedAnswer < numAnswers - 1) {
         setSelectedAnswer(selectedAnswer + 1);
       }
 
@@ -49,7 +46,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedAnswer, showResult]);
+  }, [selectedAnswer, showResult, currentQuestion]);
 
   const handleAnswerClick = (index: number) => {
     if (showResult) return;
@@ -59,7 +56,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
   const handleConfirm = () => {
     if (selectedAnswer === null || showResult) return;
 
-    const answer = ANSWERS[selectedAnswer];
+    const answer = currentQuestion.answers[selectedAnswer];
     setIsCorrect(answer.correct);
     setShowResult(true);
 
@@ -76,7 +73,10 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
   };
 
   const handleNext = () => {
-    // Reset para próxima pregunta
+    if (isLastQuestion) return;
+    
+    // Pasar a siguiente pregunta
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
@@ -84,9 +84,6 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
 
   return (
     <div className="app-container flex items-center justify-center">
-      {/* Logo */}
-      <img src="/logo-mullada.png" alt="Logo" className="app-logo" />
-
       {/* Efectos visuales de error */}
       {showWrongEffect && (
         <>
@@ -96,21 +93,15 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
       )}
 
       <div className="question-container">
-        {/* Indicador de jugadores */}
-        <div className="player-indicator">
-          {numPlayers} Jugadors
-        </div>
-
         {/* Pregunta */}
         <div className="question-box">
-          <h2 className="question-text">{QUESTION}</h2>
+          <h2 className="question-text">{currentQuestion.text}</h2>
         </div>
 
         {/* Respuestas */}
         <div className="answers-container">
-          {ANSWERS.map((answer, index) => {
+          {currentQuestion.answers.map((answer, index) => {
             const isSelected = selectedAnswer === index;
-            // SOLO mostrar correcta si acertaste
             const showCorrect = showResult && isCorrect && answer.correct;
             const showIncorrect = showResult && isSelected && !isCorrect;
 
@@ -132,24 +123,17 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
           })}
         </div>
 
-        {/* Instrucciones */}
-        {!showResult && (
-          <div className="instructions">
-            Usa les <kbd>↑</kbd> <kbd>↓</kbd> tecles o fes clic per seleccionar
-            <br />
-            Prem <kbd>Enter</kbd> per confirmar
-          </div>
-        )}
-
-        {/* Botones de navegación */}
+        {/* Botones de navegación - Solo iconos */}
         {showResult && (
           <div className="navigation-buttons">
-            <button onClick={onReset} className="nav-button">
-              ← Enrere
+            <button onClick={onReset} className="nav-button-icon" title="Tornar a l'inici">
+              ←
             </button>
-            <button onClick={handleNext} className="nav-button">
-              Següent →
-            </button>
+            {!isLastQuestion && (
+              <button onClick={handleNext} className="nav-button-icon" title="Següent pregunta">
+                →
+              </button>
+            )}
           </div>
         )}
       </div>
