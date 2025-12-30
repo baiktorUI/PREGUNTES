@@ -152,7 +152,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
         {/* Instrucciones */}
         {!showResult && (
           <div className="instructions">
-            Usa <kbd>↑</kbd> <kbd>↓</kbd> per navegar · <kbd>Enter</kbd> per confirmar
+            Prem <kbd>Enter</kbd> per confirmar
           </div>
         )}
 
