@@ -16,21 +16,37 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
 
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === QUESTIONS.length - 1;
+  const isFirstQuestion = currentQuestionIndex === 0;
 
   // Navegación con teclado
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (showResult) return;
-
       const numAnswers = currentQuestion.answers.length;
 
+      // Si está mostrando resultado, usar flechas para navegar entre preguntas
+      if (showResult) {
+        // Flecha derecha o abajo: siguiente pregunta
+        if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && !isLastQuestion) {
+          handleNext();
+          return;
+        }
+        // Flecha izquierda o arriba: pregunta anterior
+        if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && !isFirstQuestion) {
+          handlePrevious();
+          return;
+        }
+        return;
+      }
+
+      // Navegación de respuestas (cuando NO está mostrando resultado)
+      
       // Teclas numéricas para seleccionar
       if (e.key >= '1' && e.key <= String(numAnswers)) {
         const index = parseInt(e.key) - 1;
         setSelectedAnswer(index);
       }
 
-      // Flechas arriba/abajo para navegar
+      // Flechas arriba/abajo para navegar entre respuestas
       if (e.key === 'ArrowUp' && selectedAnswer !== null && selectedAnswer > 0) {
         setSelectedAnswer(selectedAnswer - 1);
       }
@@ -38,7 +54,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
         setSelectedAnswer(selectedAnswer + 1);
       }
 
-      // Enter para confirmar
+      // Enter para confirmar respuesta
       if (e.key === 'Enter' && selectedAnswer !== null) {
         handleConfirm();
       }
@@ -46,7 +62,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedAnswer, showResult, currentQuestion]);
+  }, [selectedAnswer, showResult, currentQuestion, isLastQuestion, isFirstQuestion]);
 
   const handleAnswerClick = (index: number) => {
     if (showResult) return;
@@ -77,6 +93,16 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     
     // Pasar a siguiente pregunta
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setIsCorrect(false);
+  };
+
+  const handlePrevious = () => {
+    if (isFirstQuestion) return;
+    
+    // Volver a pregunta anterior
+    setCurrentQuestionIndex(currentQuestionIndex - 1);
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
@@ -123,17 +149,19 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
           })}
         </div>
 
-        {/* Botones de navegación - Solo iconos */}
+        {/* Instrucciones */}
+        {!showResult && (
+          <div className="instructions">
+            Usa <kbd>↑</kbd> <kbd>↓</kbd> per navegar · <kbd>Enter</kbd> per confirmar
+          </div>
+        )}
+
+        {/* Instrucciones después de responder */}
         {showResult && (
-          <div className="navigation-buttons">
-            <button onClick={onReset} className="nav-button-icon" title="Tornar a l'inici">
-              ←
-            </button>
-            {!isLastQuestion && (
-              <button onClick={handleNext} className="nav-button-icon" title="Següent pregunta">
-                →
-              </button>
-            )}
+          <div className="instructions">
+            {!isFirstQuestion && <span><kbd>←</kbd> Pregunta anterior · </span>}
+            {!isLastQuestion && <span><kbd>→</kbd> Següent pregunta</span>}
+            {isLastQuestion && <span>Última pregunta</span>}
           </div>
         )}
       </div>
