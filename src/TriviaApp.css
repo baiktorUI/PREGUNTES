@@ -38,7 +38,7 @@
   border-radius: 12px;
   color: #1a1a2e;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
@@ -46,10 +46,9 @@
 }
 
 .player-button:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.5);
   background: rgba(255, 255, 255, 1);
   border: 2px solid #FF6B00;
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.5);
 }
 
 /* Estilos para QuestionScreen */
@@ -103,7 +102,7 @@
   border-radius: 12px;
   color: #1a1a2e;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -112,16 +111,14 @@
 }
 
 .answer-button:hover {
-  transform: translateX(8px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .answer-button.selected {
   background: #FFD700;
   border-color: #FFA500;
-  transform: scale(1.02);
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+  box-shadow: 0 4px 25px rgba(255, 215, 0, 0.4);
 }
 
 .answer-button.correct {
@@ -182,40 +179,7 @@
 }
 
 .reset-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 78, 24, 0.6);
-}
-
-/* Botones de navegación - SOLO ICONOS */
-.navigation-buttons {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.nav-button-icon {
-  width: 60px;
-  height: 60px;
-  font-size: 32px;
-  font-weight: bold;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  color: #1a1a2e;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-button-icon:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
-  background: rgba(255, 255, 255, 1);
-  border-color: #FF6B00;
+  box-shadow: 0 4px 20px rgba(233, 78, 24, 0.6);
 }
 
 /* Efectos visuales */
