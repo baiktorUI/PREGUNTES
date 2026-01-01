@@ -99,6 +99,9 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     const answer = currentQuestion.answers[selectedAnswer];
     setIsCorrect(answer.correct);
     setShowResult(true);
+    
+    // Añadir respuesta a las intentadas INMEDIATAMENTE
+    setAttemptedAnswers([...attemptedAnswers, selectedAnswer]);
 
     if (answer.correct) {
       // Efecto de agua - ACERTÓ
@@ -106,9 +109,6 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     } else {
       // Efecto de error - FALLÓ
       setShowWrongEffect(true);
-      
-      // Añadir respuesta a las intentadas
-      setAttemptedAnswers([...attemptedAnswers, selectedAnswer]);
       
       // Pasar al siguiente jugador después de 3 segundos
       setTimeout(() => {
@@ -158,12 +158,10 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
       )}
 
       <div className="question-container">
-        {/* Indicador de turno del jugador */}
-        {!isCorrect && (
-          <div className="player-turn-indicator">
-            TORN DEL JUGADOR {currentPlayer}
-          </div>
-        )}
+        {/* Indicador de turno del jugador - SIEMPRE VISIBLE */}
+        <div className="player-turn-indicator">
+          TORN DEL JUGADOR {currentPlayer}
+        </div>
 
         {/* Pregunta */}
         <div className="question-box">
@@ -187,7 +185,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
                 } ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''} ${
                   wasAttempted ? 'attempted' : ''
                 }`}
-                disabled={wasAttempted || (showResult && !isCorrect)}
+                disabled={wasAttempted}
               >
                 <div className="answer-letter">
                   {String.fromCharCode(65 + index)}
