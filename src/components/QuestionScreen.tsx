@@ -9,10 +9,12 @@ interface QuestionScreenProps {
 
 export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onReset }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentPlayer, setCurrentPlayer] = useState(1); // Jugador actual (1, 2, 3...)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showWrongEffect, setShowWrongEffect] = useState(false);
+  const [attemptedAnswers, setAttemptedAnswers] = useState<number[]>([]); // Respuestas ya intentadas
 
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === QUESTIONS.length - 1;
@@ -23,67 +25,100 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     const handleKeyDown = (e: KeyboardEvent) => {
       const numAnswers = currentQuestion.answers.length;
 
-      // Si está mostrando resultado, usar flechas para navegar entre preguntas
-      if (showResult) {
-        // Flecha derecha o abajo: siguiente pregunta
-        if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && !isLastQuestion) {
+      // Si está mostrando resultado de respuesta correcta, usar flechas para navegar entre preguntas
+      if (showResult && isCorrect) {
+        // Flecha derecha: siguiente pregunta
+        if (e.key === 'ArrowRight' && !isLastQuestion) {
           handleNext();
           return;
         }
-        // Flecha izquierda o arriba: pregunta anterior
-        if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && !isFirstQuestion) {
+        // Flecha izquierda: pregunta anterior
+        if (e.key === 'ArrowLeft' && !isFirstQuestion) {
           handlePrevious();
           return;
         }
         return;
       }
 
-      // Navegación de respuestas (cuando NO está mostrando resultado)
+      // Si mostró resultado incorrecto, esperar a que se limpie
+      if (showResult && !isCorrect) {
+        return;
+      }
+
+      // Navegación de respuestas
       
       // Teclas numéricas para seleccionar
       if (e.key >= '1' && e.key <= String(numAnswers)) {
         const index = parseInt(e.key) - 1;
-        setSelectedAnswer(index);
+        // No permitir seleccionar respuestas ya intentadas
+        if (!attemptedAnswers.includes(index)) {
+          setSelectedAnswer(index);
+        }
       }
 
       // Flechas arriba/abajo para navegar entre respuestas
       if (e.key === 'ArrowUp' && selectedAnswer !== null && selectedAnswer > 0) {
-        setSelectedAnswer(selectedAnswer - 1);
+        let newIndex = selectedAnswer - 1;
+        // Saltar respuestas ya intentadas
+        while (newIndex >= 0 && attemptedAnswers.includes(newIndex)) {
+          newIndex--;
+        }
+        if (newIndex >= 0) {
+          setSelectedAnswer(newIndex);
+        }
       }
       if (e.key === 'ArrowDown' && selectedAnswer !== null && selectedAnswer < numAnswers - 1) {
-        setSelectedAnswer(selectedAnswer + 1);
+        let newIndex = selectedAnswer + 1;
+        // Saltar respuestas ya intentadas
+        while (newIndex < numAnswers && attemptedAnswers.includes(newIndex)) {
+          newIndex++;
+        }
+        if (newIndex < numAnswers) {
+          setSelectedAnswer(newIndex);
+        }
       }
 
       // Enter para confirmar respuesta
-      if (e.key === 'Enter' && selectedAnswer !== null) {
+      if (e.key === 'Enter' && selectedAnswer !== null && !attemptedAnswers.includes(selectedAnswer)) {
         handleConfirm();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedAnswer, showResult, currentQuestion, isLastQuestion, isFirstQuestion]);
+  }, [selectedAnswer, showResult, currentQuestion, isLastQuestion, isFirstQuestion, isCorrect, attemptedAnswers]);
 
   const handleAnswerClick = (index: number) => {
-    if (showResult) return;
+    if (showResult || attemptedAnswers.includes(index)) return;
     setSelectedAnswer(index);
   };
 
   const handleConfirm = () => {
-    if (selectedAnswer === null || showResult) return;
+    if (selectedAnswer === null || showResult || attemptedAnswers.includes(selectedAnswer)) return;
 
     const answer = currentQuestion.answers[selectedAnswer];
     setIsCorrect(answer.correct);
     setShowResult(true);
 
     if (answer.correct) {
-      // Efecto de agua
+      // Efecto de agua - ACERTÓ
       createWaterEffect();
     } else {
-      // Efecto de error
+      // Efecto de error - FALLÓ
       setShowWrongEffect(true);
+      
+      // Añadir respuesta a las intentadas
+      setAttemptedAnswers([...attemptedAnswers, selectedAnswer]);
+      
+      // Pasar al siguiente jugador después de 3 segundos
       setTimeout(() => {
         setShowWrongEffect(false);
+        setShowResult(false);
+        setSelectedAnswer(null);
+        
+        // Cambiar al siguiente jugador
+        const nextPlayer = currentPlayer >= numPlayers ? 1 : currentPlayer + 1;
+        setCurrentPlayer(nextPlayer);
       }, 3000);
     }
   };
@@ -93,9 +128,11 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     
     // Pasar a siguiente pregunta
     setCurrentQuestionIndex(currentQuestionIndex + 1);
+    setCurrentPlayer(1); // Reiniciar al jugador 1
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
+    setAttemptedAnswers([]); // Limpiar respuestas intentadas
   };
 
   const handlePrevious = () => {
@@ -103,9 +140,11 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     
     // Volver a pregunta anterior
     setCurrentQuestionIndex(currentQuestionIndex - 1);
+    setCurrentPlayer(1); // Reiniciar al jugador 1
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
+    setAttemptedAnswers([]); // Limpiar respuestas intentadas
   };
 
   return (
@@ -119,6 +158,13 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
       )}
 
       <div className="question-container">
+        {/* Indicador de turno del jugador */}
+        {!isCorrect && (
+          <div className="player-turn-indicator">
+            TORN DEL JUGADOR {currentPlayer}
+          </div>
+        )}
+
         {/* Pregunta */}
         <div className="question-box">
           <h2 className="question-text">{currentQuestion.text}</h2>
@@ -128,6 +174,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
         <div className="answers-container">
           {currentQuestion.answers.map((answer, index) => {
             const isSelected = selectedAnswer === index;
+            const wasAttempted = attemptedAnswers.includes(index);
             const showCorrect = showResult && isCorrect && answer.correct;
             const showIncorrect = showResult && isSelected && !isCorrect;
 
@@ -137,8 +184,10 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
                 onClick={() => handleAnswerClick(index)}
                 className={`answer-button ${
                   isSelected ? 'selected' : ''
-                } ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''}`}
-                disabled={showResult}
+                } ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''} ${
+                  wasAttempted ? 'attempted' : ''
+                }`}
+                disabled={wasAttempted || (showResult && !isCorrect)}
               >
                 <div className="answer-letter">
                   {String.fromCharCode(65 + index)}
@@ -156,8 +205,8 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
           </div>
         )}
 
-        {/* Instrucciones después de responder */}
-        {showResult && (
+        {/* Instrucciones después de acertar */}
+        {showResult && isCorrect && (
           <div className="instructions">
             {!isFirstQuestion && <span><kbd>←</kbd> Pregunta anterior · </span>}
             {!isLastQuestion && <span><kbd>→</kbd> Següent pregunta</span>}
