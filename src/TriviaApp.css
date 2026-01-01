@@ -61,37 +61,28 @@
 }
 
 .player-turn-indicator {
-  background: rgba(255, 215, 0, 0.9);
-  border-radius: 12px;
-  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 14px;
   text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-  color: #1a1a2e;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-  animation: pulseGlow 2s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-  }
-  50% {
-    box-shadow: 0 4px 25px rgba(255, 215, 0, 0.7);
-  }
+  margin-bottom: 8px;
 }
 
 .question-box {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  padding: 18px;
+  padding: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin-top: 6px;
 }
 
 .question-text {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: bold;
   color: #1a1a2e;
   text-align: center;
