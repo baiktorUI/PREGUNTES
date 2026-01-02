@@ -13,7 +13,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [showWrongEffect, setShowWrongEffect] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false); // Estado de espera/suspense
   const [attemptedAnswers, setAttemptedAnswers] = useState<number[]>([]); // Respuestas ya intentadas
 
   const currentQuestion = QUESTIONS[currentQuestionIndex];
@@ -94,9 +94,12 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
   };
 
   const handleConfirm = () => {
-    if (selectedAnswer === null || showResult || attemptedAnswers.includes(selectedAnswer)) return;
+    if (selectedAnswer === null || showResult || attemptedAnswers.includes(selectedAnswer) || isWaiting) return;
 
     const answer = currentQuestion.answers[selectedAnswer];
+    
+    // Activar estado de espera (animación de suspense)
+    setIsWaiting(true);
     
     // Añadir respuesta a las intentadas INMEDIATAMENTE
     setAttemptedAnswers([...attemptedAnswers, selectedAnswer]);
@@ -105,6 +108,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     setTimeout(() => {
       setIsCorrect(answer.correct);
       setShowResult(true);
+      setIsWaiting(false);
 
       if (answer.correct) {
         // Efecto de agua - ACERTÓ
@@ -166,15 +170,18 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
             const isSelected = selectedAnswer === index;
             const wasAttempted = attemptedAnswers.includes(index);
             const showCorrect = showResult && isCorrect && answer.correct;
+            const isCurrentWaiting = isWaiting && isSelected;
 
             return (
               <button
                 key={answer.id}
                 onClick={() => handleAnswerClick(index)}
                 className={`answer-button ${
-                  isSelected ? 'selected' : ''
-                } ${showCorrect ? 'correct' : ''}`}
-                disabled={wasAttempted}
+                  isSelected && !isWaiting ? 'selected' : ''
+                } ${showCorrect ? 'correct' : ''} ${isCurrentWaiting ? 'waiting' : ''} ${
+                  wasAttempted && !isSelected ? 'attempted' : ''
+                }`}
+                disabled={wasAttempted || isWaiting}
               >
                 <div className="answer-letter">
                   {String.fromCharCode(65 + index)}
