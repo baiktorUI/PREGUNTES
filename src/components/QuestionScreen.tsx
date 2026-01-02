@@ -132,7 +132,9 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     
     // Pasar a siguiente pregunta
     setCurrentQuestionIndex(currentQuestionIndex + 1);
-    setCurrentPlayer(1); // Reiniciar al jugador 1
+    // NO resetear currentPlayer - continúa con el siguiente
+    const nextPlayer = currentPlayer >= numPlayers ? 1 : currentPlayer + 1;
+    setCurrentPlayer(nextPlayer);
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
@@ -144,7 +146,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     
     // Volver a pregunta anterior
     setCurrentQuestionIndex(currentQuestionIndex - 1);
-    setCurrentPlayer(1); // Reiniciar al jugador 1
+    // NO resetear currentPlayer - mantener turno actual
     setSelectedAnswer(null);
     setShowResult(false);
     setIsCorrect(false);
