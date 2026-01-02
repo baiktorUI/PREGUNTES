@@ -129,10 +129,33 @@
   animation: pulseCorrect 0.6s ease;
 }
 
+.answer-button.waiting {
+  background: #FFD700;
+  border-color: #FFA500;
+  animation: pulseWaiting 1s ease-in-out infinite;
+  box-shadow: 0 4px 25px rgba(255, 215, 0, 0.6);
+}
+
 .answer-button.attempted {
-  opacity: 0;
+  background: rgba(150, 150, 150, 0.2);
+  border-color: rgba(100, 100, 100, 0.3);
+  opacity: 0.3;
   pointer-events: none;
-  visibility: hidden;
+}
+
+.answer-button.attempted .answer-letter {
+  background: linear-gradient(135deg, #999, #777);
+}
+
+@keyframes pulseWaiting {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 25px rgba(255, 215, 0, 0.6);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 35px rgba(255, 215, 0, 0.9);
+  }
 }
 
 .answer-letter {
