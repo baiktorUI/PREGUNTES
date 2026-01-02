@@ -30,6 +30,7 @@ export const QUESTIONS: Question[] = [
       { id: 1, text: '1747', correct: true },
       { id: 2, text: '1859', correct: false },
       { id: 3, text: '1232', correct: false },
+      { id: 4, text: '1169', correct: false },
     ],
   },
   {
