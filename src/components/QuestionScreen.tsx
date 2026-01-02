@@ -97,30 +97,30 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
     if (selectedAnswer === null || showResult || attemptedAnswers.includes(selectedAnswer)) return;
 
     const answer = currentQuestion.answers[selectedAnswer];
-    setIsCorrect(answer.correct);
-    setShowResult(true);
     
     // Añadir respuesta a las intentadas INMEDIATAMENTE
     setAttemptedAnswers([...attemptedAnswers, selectedAnswer]);
 
-    if (answer.correct) {
-      // Efecto de agua - ACERTÓ
-      createWaterEffect();
-    } else {
-      // Efecto de error - FALLÓ
-      setShowWrongEffect(true);
-      
-      // Pasar al siguiente jugador después de 3 segundos
-      setTimeout(() => {
-        setShowWrongEffect(false);
-        setShowResult(false);
-        setSelectedAnswer(null);
-        
-        // Cambiar al siguiente jugador
-        const nextPlayer = currentPlayer >= numPlayers ? 1 : currentPlayer + 1;
-        setCurrentPlayer(nextPlayer);
-      }, 3000);
-    }
+    // Esperar 3 segundos antes de mostrar resultado
+    setTimeout(() => {
+      setIsCorrect(answer.correct);
+      setShowResult(true);
+
+      if (answer.correct) {
+        // Efecto de agua - ACERTÓ
+        createWaterEffect();
+      } else {
+        // FALLÓ - pasar al siguiente jugador
+        setTimeout(() => {
+          setShowResult(false);
+          setSelectedAnswer(null);
+          
+          // Cambiar al siguiente jugador
+          const nextPlayer = currentPlayer >= numPlayers ? 1 : currentPlayer + 1;
+          setCurrentPlayer(nextPlayer);
+        }, 100);
+      }
+    }, 3000);
   };
 
   const handleNext = () => {
@@ -149,14 +149,6 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
 
   return (
     <div className="app-container flex items-center justify-center">
-      {/* Efectos visuales de error */}
-      {showWrongEffect && (
-        <>
-          <div className="wrong-border" />
-          <div className="wrong-x">✕</div>
-        </>
-      )}
-
       <div className="question-container">
         {/* Indicador de turno del jugador - SIEMPRE VISIBLE */}
         <div className="player-turn-indicator">
@@ -174,7 +166,6 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
             const isSelected = selectedAnswer === index;
             const wasAttempted = attemptedAnswers.includes(index);
             const showCorrect = showResult && isCorrect && answer.correct;
-            const showIncorrect = showResult && isSelected && !isCorrect;
 
             return (
               <button
@@ -182,9 +173,7 @@ export const QuestionScreen: React.FC<QuestionScreenProps> = ({ numPlayers, onRe
                 onClick={() => handleAnswerClick(index)}
                 className={`answer-button ${
                   isSelected ? 'selected' : ''
-                } ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''} ${
-                  wasAttempted ? 'attempted' : ''
-                }`}
+                } ${showCorrect ? 'correct' : ''}`}
                 disabled={wasAttempted}
               >
                 <div className="answer-letter">
